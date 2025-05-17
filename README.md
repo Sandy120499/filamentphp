@@ -27,14 +27,17 @@ docker exec -it <container_name> bash
 
 ```sh
 composer install
+```
+
+```
+chown -R www-data:www-data /var/www/html
+```
+
+```
 php artisan migrate
 ```
 
-Setup configuration:
 
-```sh
-cp .env.example .env
-```
 
 Generate application key:
 
