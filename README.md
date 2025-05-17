@@ -8,6 +8,15 @@ A demo application to illustrate how Filament Admin works.
 
 ## Installation
 
+```
+yum install git docker libxcrypt-compat -y
+systemctl status docker
+systemctl start docker
+systemctl enable docker
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
 Clone the repo locally:
 
 ```
