@@ -47,11 +47,11 @@ php artisan migrate
 ```
 ```
 php artisan migrate:fresh --seed
-
+```
 
 Generate application key:
 
-```sh
+```
 php artisan key:generate
 ```
 
