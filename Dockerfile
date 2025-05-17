@@ -1,4 +1,3 @@
-
 FROM php:8.3-apache
 
 # Install system dependencies
@@ -8,6 +7,9 @@ RUN apt-get update && apt-get install -y \
     libicu-dev libexif-dev \
     && docker-php-ext-install \
     pdo pdo_mysql zip gd intl exif pcntl
+
+# Optional: suppress Apache ServerName warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Set working directory
 WORKDIR /var/www/html
@@ -27,15 +29,12 @@ RUN chown -R www-data:www-data /var/www/html \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install Laravel dependencies during build (optional)
+# Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
-
 
 # Copy and set entrypoint
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Set the entrypoint
+# Set the entrypoint to run at container start
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-RUN /bin/bash /usr/local/bin/entrypoint.sh
