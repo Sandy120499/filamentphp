@@ -31,8 +31,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --optimize-autoloader --no-dev
 
 
-# Copy the run.sh script to /tmp
-COPY run.sh /tmp/run.sh
-
-# Make run.sh executable and run it
-RUN chmod +x /tmp/run.sh && /tmp/run.sh
+# Copy and set entrypoint
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
