@@ -28,3 +28,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install Laravel dependencies during build (optional)
 RUN composer install --optimize-autoloader --no-dev
+
+# Copy and set entrypoint
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
