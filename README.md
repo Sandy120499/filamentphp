@@ -11,7 +11,7 @@ A demo application to illustrate how Filament Admin works.
 Clone the repo locally:
 
 ```
-git clone https://github.com/Sandy120499/filamentphp && cd filament
+git clone https://github.com/Sandy120499/filamentphp && cd filamentphp
 ```
 
 ```
