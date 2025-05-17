@@ -1,3 +1,4 @@
+
 FROM php:8.3-apache
 
 # Install system dependencies
@@ -29,8 +30,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install Laravel dependencies during build (optional)
 RUN composer install --optimize-autoloader --no-dev
 
-# Copy and set entrypoint
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# Copy the run.sh script to /tmp
+COPY run.sh /tmp/run.sh
+
+# Make run.sh executable and run it
+RUN chmod +x /tmp/run.sh && /tmp/run.sh
