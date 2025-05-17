@@ -36,7 +36,8 @@ chown -R www-data:www-data /var/www/html
 ```
 php artisan migrate
 ```
-
+```
+php artisan migrate:fresh --seed
 
 
 Generate application key:
