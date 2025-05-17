@@ -29,9 +29,4 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
 
-WORKDIR /var/www/html
-
-RUN composer install \
-    && chown -R www-data:www-data /var/www/html
-
 
