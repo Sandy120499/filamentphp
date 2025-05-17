@@ -11,14 +11,14 @@ A demo application to illustrate how Filament Admin works.
 Clone the repo locally:
 
 ```
-git clone git clone https://github.com/Sandy120499/filamentphp && cd filament
+git clone https://github.com/Sandy120499/filamentphp && cd filament
 ```
 
 ```
 docker-compose pull
 ```
 ```
-docker-compose pull && docker-compose up --build
+docker-compose up --build
 ```
 
 ```
