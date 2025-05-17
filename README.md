@@ -18,7 +18,7 @@ git clone https://github.com/Sandy120499/filamentphp && cd filament
 docker-compose pull
 ```
 ```
-docker-compose up --build
+docker-compose up -d --build
 ```
 
 ```
