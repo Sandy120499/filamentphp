@@ -34,5 +34,4 @@ WORKDIR /var/www/html
 RUN composer install \
     && chown -R www-data:www-data /var/www/html
 
-RUN php artisan migrate
 
