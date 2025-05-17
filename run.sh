@@ -1,7 +1,9 @@
 #!/bin/bash
 
-docker exec -it filamentphp_app_1 composer install
+composer install
 
-docker exec -it filamentphp_app_1 php artisan migrate:fresh --seed
+php artisan migrate
 
-docker exec -it filamentphp_app_1 chown -R www-data:www-data /var/www/html
+php artisan migrate:fresh --seed
+
+chown -R www-data:www-data /var/www/html
