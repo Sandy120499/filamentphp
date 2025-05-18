@@ -7,9 +7,7 @@ composer install
 chown -R www-data:www-data /var/www/html
 
 # Run Laravel migrations
-php artisan migrate
-
-php artisan db:seed
+php artisan migrate:fresh --seed
 
 # Start Apache in the foreground (important!)
 exec apache2-foreground
