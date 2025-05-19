@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'CLIENT', defaultValue: 'client1', description: 'Client Name (no spaces)')
+        string(name: 'PORT', defaultValue: '8002', description: 'App Port (e.g., 8002)')
+        string(name: 'PMA_PORT', defaultValue: '8082', description: 'phpMyAdmin Port (e.g., 8082)')
+    }
+
     environment {
         REMOTE_USER = 'ec2-user'
         REMOTE_HOST = '16.16.98.231'
@@ -19,19 +25,24 @@ pipeline {
                             sudo systemctl enable docker
 
                             if [ ! -f /usr/local/bin/docker-compose ]; then
-                                sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
+                                sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-\\\$(uname -s)-\\\$(uname -m)" -o /usr/local/bin/docker-compose
                                 sudo chmod +x /usr/local/bin/docker-compose
                             fi
 
                             if [ ! -d filamentphp ]; then
                                 git clone https://github.com/Sandy120499/filamentphp
-                            else
-                                git pull
                             fi
 
                             cd filamentphp
-                            sudo docker-compose pull
-                            sudo docker-compose up -d --build
+                            git pull
+
+                            cp docker-compose-template.yml docker-compose.yml
+
+                            sed -i "s/{{CLIENT}}/${CLIENT}/g" docker-compose.yml
+                            sed -i "s/{{PORT}}/${PORT}/g" docker-compose.yml
+                            sed -i "s/{{PMA_PORT}}/${PMA_PORT}/g" docker-compose.yml
+
+                            sudo docker-compose -p filament_${CLIENT} up -d --build
                     """
                 }
             }
@@ -43,10 +54,9 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
                             sleep 10
-                            sudo docker exec filamentphp_app_1 bash -c "
+                            sudo docker exec filament_${CLIENT}_app_${CLIENT}_1 bash -c "
                                 composer install &&
                                 chown -R www-data:www-data /var/www/html &&
-                                php artisan migrate &&
                                 php artisan migrate:fresh --seed
                             "
                     """
