@@ -14,3 +14,6 @@ php artisan migrate
 
 # 5. (Optional) Seed the database
 php artisan migrate:fresh --seed
+
+# Start Apache in the foreground
+apache2-foreground
