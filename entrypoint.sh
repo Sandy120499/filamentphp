@@ -1,13 +1,16 @@
-#!/bin/bash
+sleep 10
 
-# Run Composer install (if not already done in image build)
+# 1. Enter the container
+docker exec -it filamentphp_app_1 bash
+
+# 2. (Optional) Re-run composer install in case of any volume sync overrides
 composer install
 
-# Set ownership
+# 3. Ensure correct permissions (in case volumes override Dockerfile permissions)
 chown -R www-data:www-data /var/www/html
 
-# Run Laravel migrations
-php artisan migrate:fresh --seed
+# 4. Run Laravel migrations
+php artisan migrate
 
-# Start Apache in the foreground (important!)
-exec apache2-foreground
+# 5. (Optional) Seed the database
+php artisan db:seed
