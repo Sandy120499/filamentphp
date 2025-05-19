@@ -2,16 +2,15 @@ pipeline {
     agent any
 
     parameters {
+        string(name: 'IP_ADDRESS', description: 'Remote Server IP Address')
         string(name: 'CLIENT', defaultValue: 'client1', description: 'Client Name (no spaces)')
         string(name: 'PORT', defaultValue: '8000', description: 'App Port (e.g., 8000)')
         string(name: 'MYSQLPORT', defaultValue: '3306', description: 'MySql Port (e.g., 3306)')
-        string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')
-        string(name: 'IP_ADDRESS')
+        string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')  
     }
 
     environment {
         REMOTE_USER = 'ec2-user'
-        REMOTE_HOST = '${{IP_ADDRESS}}'
         SSH_KEY_ID = 'jenkins_id_rsa'
         DOCKER_COMPOSE_VERSION = '1.29.2'
     }
@@ -21,7 +20,7 @@ pipeline {
             steps {
                 sshagent([env.SSH_KEY_ID]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
                             sudo -i
                             useradd ${params.CLIENT}
                             cd /home/${params.CLIENT}
