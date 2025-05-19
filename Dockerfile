@@ -37,4 +37,5 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Override default CMD
-CMD ["/entrypoint.sh"]
+CMD echo "⚠️  Wait for 5 minutes to setup database..." && /entrypoint.sh
+#CMD ["/entrypoint.sh"]
