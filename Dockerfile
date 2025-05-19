@@ -32,9 +32,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
 
-# Copy and set entrypoint
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Copy custom entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Set the entrypoint to run at container start
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# Override default CMD
+CMD ["/entrypoint.sh"]
