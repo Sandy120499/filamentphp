@@ -21,6 +21,9 @@ pipeline {
                 sshagent([env.SSH_KEY_ID]) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+                            sudo -i
+                            useradd ${params.CLIENT}
+                            cd /home/${params.CLIENT}
                             sudo yum install -y git docker libxcrypt-compat
                             sudo systemctl start docker
                             sudo systemctl enable docker
