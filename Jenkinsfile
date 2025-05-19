@@ -40,6 +40,7 @@ pipeline {
 
                             sed -i "s/{{CLIENT}}/${params.CLIENT}/g" docker-compose.yml
                             sed -i "s/{{PORT}}/${params.PORT}/g" docker-compose.yml
+                            sed -i "s/{{MYSQLPORT}}/${params.PMA_PORT}/g" docker-compose.yml
                             sed -i "s/{{PMA_PORT}}/${params.PMA_PORT}/g" docker-compose.yml
 
                             sudo docker-compose -p filament_${params.CLIENT} up -d --build
