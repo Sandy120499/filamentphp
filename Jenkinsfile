@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        REMOTE_USER = 'ec2-user'                 // Change to your remote server user
-        REMOTE_HOST = '13.50.233.103'              // Change to your remote server IP
-        SSH_KEY_ID = 'jenkins_id_rsa'            // Jenkins credential ID
+        REMOTE_USER = 'ec2-user'
+        REMOTE_HOST = '13.50.233.103'
+        SSH_KEY_ID = 'jenkins_id_rsa'
         DOCKER_COMPOSE_VERSION = '1.29.2'
     }
 
@@ -32,6 +32,23 @@ pipeline {
                             cd filamentphp
                             sudo docker-compose pull
                             sudo docker-compose up -d --build
+                    """
+                }
+            }
+        }
+
+        stage('Post-Deploy Commands') {
+            steps {
+                sshagent([env.SSH_KEY_ID]) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
+                            sleep 10
+                            sudo docker exec filamentphp_app_1 bash -c "
+                                composer install &&
+                                chown -R www-data:www-data /var/www/html &&
+                                php artisan migrate &&
+                                php artisan migrate:fresh --seed
+                            "
                     """
                 }
             }
