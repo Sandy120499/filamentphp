@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REMOTE_USER = 'ec2-user'                 // Change to your remote server user
-        REMOTE_HOST = '13.49.229.7'              // Change to your remote server IP
+        REMOTE_HOST = '13.50.233.103'              // Change to your remote server IP
         SSH_KEY_ID = 'jenkins_id_rsa'            // Jenkins credential ID
         DOCKER_COMPOSE_VERSION = '1.29.2'
     }
