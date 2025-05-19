@@ -27,7 +27,7 @@ services:
       MYSQL_USER: laravel_usr
       MYSQL_PASSWORD: 'L@r#vel@123'
     ports:
-      - "33{{PORT}}:3306"
+      - "{{MYSQLPORT}}:3306"
     volumes:
       - dbdata_{{CLIENT}}:/var/lib/mysql
 
