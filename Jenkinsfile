@@ -56,7 +56,7 @@ pipeline {
             steps {
                 sshagent([env.SSH_KEY_ID]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
                             sleep 10
                             sudo -i
                             cd /home/${params.CLIENT}/filamentphp
