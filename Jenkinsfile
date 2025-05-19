@@ -4,6 +4,7 @@ pipeline {
     parameters {
         string(name: 'CLIENT', defaultValue: 'client1', description: 'Client Name (no spaces)')
         string(name: 'PORT', defaultValue: '8002', description: 'App Port (e.g., 8002)')
+        string(name: 'MYSQLPORT', defaultValue: '3306', description: 'MySql Port (e.g., 3306)')
         string(name: 'PMA_PORT', defaultValue: '8082', description: 'phpMyAdmin Port (e.g., 8082)')
     }
 
