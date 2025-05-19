@@ -60,7 +60,7 @@ pipeline {
                             sleep 10
                             sudo -i
                             cd /home/${params.CLIENT}/filamentphp
-                            docker exec filament_app_${params.CLIENT}_1 bash -c "
+                            docker exec filament_app_${params.CLIENT} bash -c "
                                 composer install &&
                                 chown -R www-data:www-data /var/www/html &&
                                 php artisan migrate:fresh --seed"
