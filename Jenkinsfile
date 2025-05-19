@@ -56,8 +56,7 @@ pipeline {
                             sudo docker exec filament_${params.CLIENT}_app_${params.CLIENT}_1 bash -c "
                                 composer install &&
                                 chown -R www-data:www-data /var/www/html &&
-                                php artisan migrate:fresh --seed
-                            "
+                                php artisan migrate:fresh --seed"
                     """
                 }
             }
