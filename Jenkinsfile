@@ -2,37 +2,37 @@ pipeline {
     agent any
 
     environment {
-        REMOTE_USER = 'ec2-user'                     // Change to your remote server user
-        REMOTE_HOST = '13.49.229.7'            // Change to your remote server IP
-        SSH_KEY_ID = 'jenkins_id_rsa'         // Jenkins credential ID
+        REMOTE_USER = 'ec2-user'                 // Change to your remote server user
+        REMOTE_HOST = '13.49.229.7'              // Change to your remote server IP
+        SSH_KEY_ID = 'jenkins_id_rsa'            // Jenkins credential ID
         DOCKER_COMPOSE_VERSION = '1.29.2'
     }
 
     stages {
         stage('Deploy to Remote Server') {
             steps {
-                sshagent([SSH_KEY_ID]) {
+                sshagent([env.SSH_KEY_ID]) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} <<EOF
-                      sudo yum install -y git docker libxcrypt-compat
-                      sudo systemctl start docker
-                      sudo systemctl enable docker
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
+                            sudo yum install -y git docker libxcrypt-compat
+                            sudo systemctl start docker
+                            sudo systemctl enable docker
 
-                      if [ ! -f /usr/local/bin/docker-compose ]; then
-                        sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-\\\$(uname -s)-\\\$(uname -m)" -o /usr/local/bin/docker-compose
-                        sudo chmod +x /usr/local/bin/docker-compose
-                      fi
+                            if [ ! -f /usr/local/bin/docker-compose ]; then
+                                sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
+                                sudo chmod +x /usr/local/bin/docker-compose
+                            fi
 
-                      if [ ! -d filamentphp ]; then
-                        git clone https://github.com/Sandy120499/filamentphp
-                      else
-                        cd filamentphp && git pull
-                      fi
+                            if [ ! -d filamentphp ]; then
+                                git clone https://github.com/Sandy120499/filamentphp
+                            else
+                                cd filamentphp && git pull
+                            fi
 
-                      cd filamentphp
-                      sudo docker-compose pull
-                      sudo docker-compose up -d --build
-                    EOF
+                            cd filamentphp
+                            sudo docker-compose pull
+                            sudo docker-compose up -d --build
+                        EOF
                     """
                 }
             }
