@@ -13,4 +13,4 @@ chown -R www-data:www-data /var/www/html
 php artisan migrate
 
 # 5. (Optional) Seed the database
-php artisan db:seed
+php artisan migrate:fresh --seed
