@@ -46,7 +46,7 @@ pipeline {
                             sed -i "s/{{MYSQLPORT}}/${params.MYSQLPORT}/g" docker-compose.yml
                             sed -i "s/{{PMA_PORT}}/${params.PMA_PORT}/g" docker-compose.yml
 
-                            sudo docker-compose -p filament_${params.CLIENT} up -d --build
+                            sudo docker-compose -p filament up -d --build
                     """
                 }
             }
@@ -60,7 +60,7 @@ pipeline {
                             sleep 10
                             sudo -i
                             cd /home/${params.CLIENT}/filamentphp
-                            docker exec filament_${params.CLIENT}_app_${params.CLIENT}_1 bash -c "
+                            docker exec filament_app_${params.CLIENT}_1 bash -c "
                                 composer install &&
                                 chown -R www-data:www-data /var/www/html &&
                                 php artisan migrate:fresh --seed"
