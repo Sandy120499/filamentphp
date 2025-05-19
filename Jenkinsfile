@@ -43,7 +43,6 @@ pipeline {
                             sed -i "s/{{PMA_PORT}}/${params.PMA_PORT}/g" docker-compose.yml
 
                             sudo docker-compose -p filament_${params.CLIENT} up -d --build
-                        EOF
                     """
                 }
             }
@@ -60,7 +59,6 @@ pipeline {
                                 chown -R www-data:www-data /var/www/html &&
                                 php artisan migrate:fresh --seed
                             "
-                        EOF
                     """
                 }
             }
