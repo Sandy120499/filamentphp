@@ -58,7 +58,9 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
                             sleep 10
-                            sudo docker exec filament_${params.CLIENT}_app_${params.CLIENT}_1 bash -c "
+                            sudo -i
+                            cd /home/${params.CLIENT}/filamentphp
+                            docker exec filament_${params.CLIENT}_app_${params.CLIENT}_1 bash -c "
                                 composer install &&
                                 chown -R www-data:www-data /var/www/html &&
                                 php artisan migrate:fresh --seed"
