@@ -19,7 +19,7 @@ pipeline {
             steps {
                 sshagent([env.SSH_KEY_ID]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
                             sudo yum install -y git docker libxcrypt-compat
                             sudo systemctl start docker
                             sudo systemctl enable docker
@@ -38,11 +38,12 @@ pipeline {
 
                             cp docker-compose-template.yml docker-compose.yml
 
-                            sed -i "s/{{CLIENT}}/${CLIENT}/g" docker-compose.yml
-                            sed -i "s/{{PORT}}/${PORT}/g" docker-compose.yml
-                            sed -i "s/{{PMA_PORT}}/${PMA_PORT}/g" docker-compose.yml
+                            sed -i "s/{{CLIENT}}/${params.CLIENT}/g" docker-compose.yml
+                            sed -i "s/{{PORT}}/${params.PORT}/g" docker-compose.yml
+                            sed -i "s/{{PMA_PORT}}/${params.PMA_PORT}/g" docker-compose.yml
 
-                            sudo docker-compose -p filament_${CLIENT} up -d --build
+                            sudo docker-compose -p filament_${params.CLIENT} up -d --build
+                        EOF
                     """
                 }
             }
@@ -52,12 +53,14 @@ pipeline {
             steps {
                 sshagent([env.SSH_KEY_ID]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
                             sleep 10
-                            sudo docker exec filament_${CLIENT}_app_${CLIENT}_1 bash -c "
+                            sudo docker exec filament_${params.CLIENT}_app_${params.CLIENT}_1 bash -c "
                                 composer install &&
                                 chown -R www-data:www-data /var/www/html &&
-                                php artisan migrate:fresh --seed"
+                                php artisan migrate:fresh --seed
+                            "
+                        EOF
                     """
                 }
             }
