@@ -31,11 +31,3 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
-
-# Copy custom entrypoint
-#COPY entrypoint.sh /entrypoint.sh
-#RUN chmod +x /entrypoint.sh
-
-# Override default CMD
-#CMD echo "⚠️  Wait for 5 minutes to setup database..." && /entrypoint.sh
-#CMD ["/entrypoint.sh"]
