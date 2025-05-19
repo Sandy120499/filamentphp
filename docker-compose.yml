@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app_{{CLIENT}}:
+    container_name: app_{{CLIENT}}
     build:
       context: .
       dockerfile: Dockerfile
@@ -19,6 +20,7 @@ services:
       - DB_PASSWORD='L@r#vel@123'
 
   db:
+    container_name: db_{{CLIENT}}
     image: mysql:8.0
     restart: always
     environment:
@@ -32,6 +34,7 @@ services:
       - dbdata_{{CLIENT}}:/var/lib/mysql
 
   phpmyadmin_{{CLIENT}}:
+    container_name: phpmyadmin_{{CLIENT}}
     image: phpmyadmin/phpmyadmin
     ports:
       - "{{PMA_PORT}}:80"
