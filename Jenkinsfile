@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REMOTE_USER = 'ec2-user'
-        REMOTE_HOST = '13.50.233.103'
+        REMOTE_HOST = '13.53.198.194'
         SSH_KEY_ID = 'jenkins_id_rsa'
         DOCKER_COMPOSE_VERSION = '1.29.2'
     }
@@ -26,7 +26,7 @@ pipeline {
                             if [ ! -d filamentphp ]; then
                                 git clone https://github.com/Sandy120499/filamentphp
                             else
-                                cd filamentphp && git pull
+                                git pull
                             fi
 
                             cd filamentphp
