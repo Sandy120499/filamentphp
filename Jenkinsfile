@@ -6,11 +6,12 @@ pipeline {
         string(name: 'PORT', defaultValue: '8000', description: 'App Port (e.g., 8000)')
         string(name: 'MYSQLPORT', defaultValue: '3306', description: 'MySql Port (e.g., 3306)')
         string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')
+        string(name: 'IP_ADDRESS')
     }
 
     environment {
         REMOTE_USER = 'ec2-user'
-        REMOTE_HOST = '16.16.98.231'
+        REMOTE_HOST = 'IP_ADDRESS'
         SSH_KEY_ID = 'jenkins_id_rsa'
         DOCKER_COMPOSE_VERSION = '1.29.2'
     }
