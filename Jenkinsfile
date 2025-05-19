@@ -32,7 +32,6 @@ pipeline {
                             cd filamentphp
                             sudo docker-compose pull
                             sudo docker-compose up -d --build
-                        EOF
                     """
                 }
             }
