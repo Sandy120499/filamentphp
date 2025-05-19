@@ -36,7 +36,6 @@ pipeline {
                             cd filamentphp
                             git pull
 
-                            cp docker-compose-template.yml docker-compose.yml
 
                             sed -i "s/{{CLIENT}}/${params.CLIENT}/g" docker-compose.yml
                             sed -i "s/{{PORT}}/${params.PORT}/g" docker-compose.yml
