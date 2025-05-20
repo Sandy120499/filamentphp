@@ -7,6 +7,7 @@ pipeline {
         string(name: 'PORT', defaultValue: '8000', description: 'App Port (e.g., 8000)')
         string(name: 'MYSQLPORT', defaultValue: '3306', description: 'MySQL Port (e.g., 3306)')
         string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')  
+        string(name: 'DB_ROOTPASSWD', description: 'Enter Root Password')
         string(name: 'DB_NAME', description: 'Enter Database Name')
         string(name: 'DB_USERNAME', description: 'Enter Database Username')
         string(name: 'DB_PASSWD', description: 'Enter Database User Password')
@@ -64,6 +65,7 @@ pipeline {
                             sed -i "s/{{PORT}}/${params.PORT}/g" docker-compose.yml
                             sed -i "s/{{MYSQLPORT}}/${params.MYSQLPORT}/g" docker-compose.yml
                             sed -i "s/{{PMA_PORT}}/${params.PMA_PORT}/g" docker-compose.yml
+                            sed -i "s/{{DB_ROOTPASSWD}}/${params.DB_ROOTPASSWD}/g" docker-compose.yml
                             sed -i "s/{{DB_NAME}}/${params.DB_NAME}/g" docker-compose.yml
                             sed -i "s/{{DB_USERNAME}}/${params.DB_USERNAME}/g" docker-compose.yml
                             sed -i "s/{{DB_PASSWD}}/${params.DB_PASSWD}/g" docker-compose.yml
