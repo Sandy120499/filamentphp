@@ -14,7 +14,7 @@ services:
       - db
     environment:
       DB_CONNECTION: mysql
-      DB_HOST: db
+      DB_HOST: localhost
       DB_PORT: {{MYSQLPORT}}
       DB_DATABASE: {{DB_NAME}}
       DB_USERNAME: {{DB_USERNAME}}
@@ -22,7 +22,7 @@ services:
 
   db:
     container_name: db_{{CLIENT}}
-    image: mysql:8.0
+    image: mysql:8.0_{{CLIENT}}
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: {{DB_ROOTPASSWD}}
