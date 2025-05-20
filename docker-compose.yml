@@ -16,9 +16,9 @@ services:
       DB_CONNECTION: mysql
       DB_HOST: db
       DB_PORT: 3306
-      DB_DATABASE: "{{DB_NAME}}"
-      DB_USERNAME: "{{DB_USERNAME}}"
-      DB_PASSWORD: "{{DB_PASSWD}}"
+      DB_DATABASE: {{DB_NAME}}
+      DB_USERNAME: {{DB_USERNAME}}
+      DB_PASSWORD: '{{DB_PASSWD}}'
 
   db:
     container_name: db_{{CLIENT}}
@@ -26,9 +26,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: Admin@321@123
-      MYSQL_DATABASE: "{{DB_NAME}}"
-      MYSQL_USER: "{{DB_USERNAME}}"
-      MYSQL_PASSWORD: "{{DB_PASSWD}}"
+      MYSQL_DATABASE: {{DB_NAME}}
+      MYSQL_USER: {{DB_USERNAME}}
+      MYSQL_PASSWORD: '{{DB_PASSWD}}'
     ports:
       - "{{MYSQLPORT}}:3306"
     volumes:
