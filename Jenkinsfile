@@ -50,7 +50,7 @@ DB_HOST=127.0.0.1\\
 DB_PORT=${params.MYSQLPORT}\\
 DB_DATABASE=${params.DB_NAME}\\
 DB_USERNAME=${params.DB_USERNAME}\\
-DB_PASSWORD=${params.DB_PASSWD}' .env
+DB_PASSWORD="${params.DB_PASSWD}"' .env
 
                             git pull
 
@@ -58,6 +58,9 @@ DB_PASSWORD=${params.DB_PASSWD}' .env
                             sed -i "s/{{PORT}}/${params.PORT}/g" docker-compose.yml
                             sed -i "s/{{MYSQLPORT}}/${params.MYSQLPORT}/g" docker-compose.yml
                             sed -i "s/{{PMA_PORT}}/${params.PMA_PORT}/g" docker-compose.yml
+                            sed -i "s/{{DB_NAME}}/${params.DB_NAME}/g" docker-compose.yml
+                            sed -i "s/{DB_USERNAME}}/${params.DB_USERNAME}/g" docker-compose.yml
+                            sed -i "s/{{DB_PASSWD}}/${params.DB_PASSWD}/g" docker-compose.yml
 
                             docker-compose -p filament up -d --build
 EOF
