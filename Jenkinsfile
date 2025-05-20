@@ -7,6 +7,9 @@ pipeline {
         string(name: 'PORT', defaultValue: '8000', description: 'App Port (e.g., 8000)')
         string(name: 'MYSQLPORT', defaultValue: '3306', description: 'MySql Port (e.g., 3306)')
         string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')  
+        string(name: 'DB_NAME', description: 'Enter Database Name')
+        string(name: 'DB_USERNAME', description: 'Enter Database Username')
+        string(name: 'DB_PASSWD', description: 'Enter Database User Password')
     }
 
     environment {
@@ -38,6 +41,14 @@ pipeline {
                             fi
 
                             cd filamentphp
+                            cp .env.example .env
+                            sed -i '/^DB_CONNECTION=sqlite$/c\DB_CONNECTION=mysql\
+                            DB_HOST=127.0.0.1\
+                            DB_PORT=3306\
+                            DB_DATABASE=${params.DB_NAME}\
+                            DB_USERNAME=${params.DB_USERNAME}\
+                            DB_PASSWORD='\''${params.DB_PASSWD}'\''' .env
+                            
                             git pull
 
 
