@@ -7,10 +7,10 @@ pipeline {
         string(name: 'PORT', defaultValue: '8000', description: 'App Port (e.g., 8000)')
         string(name: 'MYSQLPORT', defaultValue: '3306', description: 'MySQL Port (e.g., 3306)')
         string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')  
-        string(name: 'DB_ROOTPASSWD', description: 'Enter Root Password')
+        string(name: "DB_ROOTPASSWD", description: 'Enter Root Password')
         string(name: 'DB_NAME', description: 'Enter Database Name')
         string(name: 'DB_USERNAME', description: 'Enter Database Username')
-        string(name: 'DB_PASSWD', description: 'Enter Database User Password')
+        string(name: "DB_PASSWD", description: 'Enter Database User Password')
     }
 
     environment {
