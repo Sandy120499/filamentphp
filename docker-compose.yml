@@ -14,7 +14,7 @@ services:
       - db
     environment:
       DB_CONNECTION: mysql
-      DB_HOST: localhost
+      DB_HOST: db
       DB_PORT: {{MYSQLPORT}}
       DB_DATABASE: {{DB_NAME}}
       DB_USERNAME: {{DB_USERNAME}}
