@@ -55,7 +55,7 @@ pipeline {
                             # Update .env file
                             sed -i '/^DB_CONNECTION=/c\\DB_CONNECTION=mysql' .env
                             sed -i '/^DB_HOST=/c\\DB_HOST=db' .env
-                            sed -i '/^DB_PORT=/c\\DB_PORT=3306 .env
+                            sed -i '/^DB_PORT=/c\\DB_PORT=3306' .env
                             sed -i '/^DB_DATABASE=/c\\DB_DATABASE=${params.DB_NAME}' .env
                             sed -i '/^DB_USERNAME=/c\\DB_USERNAME=${params.DB_USERNAME}' .env
                             sed -i '/^DB_PASSWORD=/c\\DB_PASSWORD=${params.DB_PASSWD}' .env
