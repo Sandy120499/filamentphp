@@ -83,7 +83,7 @@ EOF
                             sleep 10
                             sudo -i
                             cd /home/${params.CLIENT}/filamentphp
-                            docker exec filament_app_${params.CLIENT} bash -c "
+                            docker exec app_${params.CLIENT} bash -c "
                                 composer install &&
                                 php artisan key:generate &&
                                 php artisan migrate:fresh --seed &&
