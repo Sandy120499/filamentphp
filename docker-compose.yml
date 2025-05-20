@@ -22,7 +22,7 @@ services:
 
   db:
     container_name: db_{{CLIENT}}
-    image: mysql:8.0_{{CLIENT}}
+    image: mysql:8.0
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: {{DB_ROOTPASSWD}}
