@@ -70,7 +70,7 @@ pipeline {
                             sed -i "s/{{DB_USERNAME}}/${params.DB_USERNAME}/g" docker-compose.yml
                             sed -i "s/{{DB_PASSWD}}/${params.DB_PASSWD}/g" docker-compose.yml
 
-                            docker-compose -p filament up -d --build
+                            docker-compose -p filament_${params.CLIENT} up -d --build
 EOF
                     """
                 }
