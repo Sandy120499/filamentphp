@@ -90,9 +90,9 @@ EOF
                             docker exec app_${params.CLIENT} bash -c "
                                 composer install &&
                                 php artisan down &&
+                                chown -R www-data:www-data /var/www/html &&
                                 php artisan key:generate &&
                                 php artisan migrate:fresh --seed &&
-                                chown -R www-data:www-data /var/www/html &&
                                 php artisan up"
 EOF
                     """
