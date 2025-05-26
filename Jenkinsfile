@@ -45,7 +45,7 @@ pipeline {
 
                             # Clone and prepare project
                             if [ ! -d filamentphp ]; then
-                                git clone https://github.com/Sandy120499/filamentphp
+                                git clone https://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@github.com/Sandy120499/filamentphp
                             fi
 
                             cd filamentphp
