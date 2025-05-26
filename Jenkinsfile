@@ -89,7 +89,7 @@ EOF
                             cd /home/${params.CLIENT}/filamentphp
                             docker exec app_${params.CLIENT} bash -c "
                                 composer install &&
-                                php artisan dowm &&
+                                php artisan down &&
                                 php artisan key:generate &&
                                 php artisan migrate:fresh --seed &&
                                 chown -R www-data:www-data /var/www/html &&
