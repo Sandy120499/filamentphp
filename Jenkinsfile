@@ -59,6 +59,7 @@ pipeline {
                             sed -i '/^DB_DATABASE=/c\\DB_DATABASE=${params.DB_NAME}' .env
                             sed -i '/^DB_USERNAME=/c\\DB_USERNAME=${params.DB_USERNAME}' .env
                             sed -i '/^DB_PASSWORD=/c\\DB_PASSWORD=${params.DB_PASSWD}' .env
+                            sed -i '/^APP_NAME=/c\\APP_NAME="${params.CLIENT}"
 
                             # Replace placeholders in docker-compose.yml
                             sed -i "s/{{CLIENT}}/${params.CLIENT}/g" docker-compose.yml
@@ -87,9 +88,11 @@ EOF
                             cd /home/${params.CLIENT}/filamentphp
                             docker exec app_${params.CLIENT} bash -c "
                                 composer install &&
+                                php artisan dowm &&
                                 php artisan key:generate &&
                                 php artisan migrate:fresh --seed &&
-                                chown -R www-data:www-data /var/www/html"
+                                chown -R www-data:www-data /var/www/html &&
+                                php artisan up"
 EOF
                     """
                 }
