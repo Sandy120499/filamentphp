@@ -59,7 +59,8 @@ pipeline {
                             sed -i '/^DB_DATABASE=/c\\DB_DATABASE=${params.DB_NAME}' .env
                             sed -i '/^DB_USERNAME=/c\\DB_USERNAME=${params.DB_USERNAME}' .env
                             sed -i '/^DB_PASSWORD=/c\\DB_PASSWORD=${params.DB_PASSWD}' .env
-                            sed -i '/^APP_NAME=/c\\APP_NAME="${params.CLIENT}"
+                            sed -i '/^APP_NAME=/c\\APP_NAME="${params.CLIENT}"' .env
+
 
                             # Replace placeholders in docker-compose.yml
                             sed -i "s/{{CLIENT}}/${params.CLIENT}/g" docker-compose.yml
