@@ -84,6 +84,8 @@ EOF
                             set -e
                             sudo -i
 
+                            cd filamentphp
+
                             if ! command -v nginx > /dev/null 2>&1; then
                                 echo "Installing nginx..."
                                 yum install -y nginx
