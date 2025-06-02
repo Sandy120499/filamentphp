@@ -60,6 +60,8 @@ pipeline {
                             git pull
                             cp .env.example .env
                             cp sample.conf /etc/nginx/conf.d/${params.CLIENT}.conf
+                            mkdir -p /etc/nginx/ssl
+                            mv certificate.crt ca_bundle.crt private.key /etc/nginx/ssl/
 
                             sed -i '/^DB_CONNECTION=/c\\DB_CONNECTION=mysql' .env
                             sed -i '/^DB_HOST=/c\\DB_HOST=db' .env
