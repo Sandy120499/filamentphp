@@ -23,34 +23,6 @@ pipeline {
 
     stages {
 
-        stage('Install and Configure Nginx') {
-            steps {
-                sshagent([env.SSH_KEY_ID]) {
-                    sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
-                            set -e
-                            sudo -i
-
-                            if ! command -v nginx > /dev/null 2>&1; then
-                                echo "Installing nginx..."
-                                yum install -y nginx
-                                systemctl enable nginx
-                                systemctl start nginx
-                            else
-                                echo "Nginx already installed."
-                            fi
-
-                            echo "Creating nginx config..."
-                            cp sample.conf /etc/nginx/conf.d/${params.CLIENT}.conf
-                            sed -i '/^app_url/c\\${params.URL}' etc/nginx/conf.d/${params.CLIENT}.conf
-                            sed -i '/^3000/c\\${params.PORT}' etc/nginx/conf.d/${params.CLIENT}.conf
-                            nginx -t && systemctl reload nginx
-EOF
-                    """
-                }
-            }
-        }
-
         stage('Deploy to Remote Server') {
             steps {
                 sshagent([env.SSH_KEY_ID]) {
@@ -98,6 +70,34 @@ EOF
                             sed -i "s/{{DB_PASSWD}}/${params.DB_PASSWD}/g" docker-compose.yml
 
                             docker-compose -p filament_${params.CLIENT} up -d --build
+EOF
+                    """
+                }
+            }
+        }
+
+        stage('Install and Configure Nginx') {
+            steps {
+                sshagent([env.SSH_KEY_ID]) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
+                            set -e
+                            sudo -i
+
+                            if ! command -v nginx > /dev/null 2>&1; then
+                                echo "Installing nginx..."
+                                yum install -y nginx
+                                systemctl enable nginx
+                                systemctl start nginx
+                            else
+                                echo "Nginx already installed."
+                            fi
+
+                            echo "Creating nginx config..."
+                            cp sample.conf /etc/nginx/conf.d/${params.CLIENT}.conf
+                            sed -i '/^app_url/c\\${params.URL}' etc/nginx/conf.d/${params.CLIENT}.conf
+                            sed -i '/^3000/c\\${params.PORT}' etc/nginx/conf.d/${params.CLIENT}.conf
+                            nginx -t && systemctl reload nginx
 EOF
                     """
                 }
