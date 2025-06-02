@@ -38,6 +38,15 @@ pipeline {
                             yum install -y git docker libxcrypt-compat
                             systemctl enable --now docker
 
+                            if ! command -v nginx > /dev/null 2>&1; then
+                                echo "Installing nginx..."
+                                yum install -y nginx
+                                systemctl enable nginx
+                                systemctl start nginx
+                            else
+                                echo "Nginx already installed."
+                            fi
+
                             if [ ! -f /usr/local/bin/docker-compose ]; then
                                 curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
                                 chmod +x /usr/local/bin/docker-compose
@@ -50,6 +59,7 @@ pipeline {
                             cd filamentphp
                             git pull
                             cp .env.example .env
+                            cp sample.conf /etc/nginx/conf.d/${params.CLIENT}.conf
 
                             sed -i '/^DB_CONNECTION=/c\\DB_CONNECTION=mysql' .env
                             sed -i '/^DB_HOST=/c\\DB_HOST=db' .env
@@ -71,17 +81,22 @@ pipeline {
 
                             docker-compose -p filament_${params.CLIENT} up -d --build
 
-                            if ! command -v nginx > /dev/null 2>&1; then
-                                echo "Installing nginx..."
-                                yum install -y nginx
-                                systemctl enable nginx
-                                systemctl start nginx
-                            else
-                                echo "Nginx already installed."
-                            fi
+                            
+EOF
+                    """
+                }
+            }
+        }
+
+        stage('Configure Nginx') {
+            steps {
+                sshagent([env.SSH_KEY_ID]) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
+                            set -e
+                            sudo -i
 
                             echo "Creating nginx config..."
-                            cp sample.conf /etc/nginx/conf.d/${params.CLIENT}.conf
                             sed -i '/^app_url/c\\${params.URL}' etc/nginx/conf.d/${params.CLIENT}.conf
                             sed -i '/^3000/c\\${params.PORT}' etc/nginx/conf.d/${params.CLIENT}.conf
                             nginx -t && systemctl reload nginx
