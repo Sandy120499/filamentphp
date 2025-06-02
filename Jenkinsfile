@@ -4,6 +4,8 @@ pipeline {
     parameters {
         string(name: 'IP_ADDRESS', description: 'Remote Server IP Address')
         string(name: 'CLIENT', defaultValue: 'client1', description: 'Client Name (no spaces)')
+        string(name: 'URL', description: 'Enter application URL')
+        string(name: 'PMAURL', description: 'Enter PMA application URL')
         string(name: 'PORT', defaultValue: '8000', description: 'App Port (e.g., 8000)')
         string(name: 'MYSQLPORT', defaultValue: '3306', description: 'MySQL Port (e.g., 3306)')
         string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')  
@@ -60,6 +62,7 @@ pipeline {
                             sed -i '/^DB_USERNAME=/c\\DB_USERNAME=${params.DB_USERNAME}' .env
                             sed -i '/^DB_PASSWORD=/c\\DB_PASSWORD=${params.DB_PASSWD}' .env
                             sed -i '/^APP_NAME=/c\\APP_NAME="${params.CLIENT}"' .env
+                            echo "ASSET_URL=${params.URL}" >> .env
 
 
                             # Replace placeholders in docker-compose.yml
