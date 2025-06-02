@@ -97,8 +97,8 @@ EOF
                             sudo -i
 
                             echo "Creating nginx config..."
-                            sed -i '/^3000/c\\${params.PORT}' /etc/nginx/conf.d/${params.CLIENT}.conf
                             sed -i 's/server_name app_url;/server_name ${params.URL};/' /etc/nginx/conf.d/${params.CLIENT}.conf
+                            sed -i 's|proxy_pass http://localhost:3000;|proxy_pass http://localhost:${params.PORT};|' /etc/nginx/conf.d/${params.CLIENT}.conf
                             nginx -t && systemctl reload nginx
 EOF
                     """
