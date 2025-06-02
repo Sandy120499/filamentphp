@@ -4,11 +4,11 @@ pipeline {
     parameters {
         string(name: 'IP_ADDRESS', description: 'Remote Server IP Address')
         string(name: 'CLIENT', defaultValue: 'client1', description: 'Client Name (no spaces)')
-        string(name: 'URL', description: 'Enter application URL')
+        string(name: 'URL', description: 'Enter application URL (e.g., yourdomain.com)')
         string(name: 'PMAURL', description: 'Enter PMA application URL')
         string(name: 'PORT', defaultValue: '8000', description: 'App Port (e.g., 8000)')
         string(name: 'MYSQLPORT', defaultValue: '3306', description: 'MySQL Port (e.g., 3306)')
-        string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')  
+        string(name: 'PMA_PORT', defaultValue: '8080', description: 'phpMyAdmin Port (e.g., 8080)')
         string(name: 'DB_ROOTPASSWD', description: 'Enter Root Password')
         string(name: 'DB_NAME', description: 'Enter Database Name')
         string(name: 'DB_USERNAME', description: 'Enter Database Username')
@@ -22,6 +22,51 @@ pipeline {
     }
 
     stages {
+
+        stage('Install and Configure Nginx') {
+            steps {
+                sshagent([env.SSH_KEY_ID]) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
+                            set -e
+                            sudo -i
+
+                            if ! command -v nginx > /dev/null 2>&1; then
+                                echo "Installing nginx..."
+                                yum install -y nginx
+                                systemctl enable nginx
+                                systemctl start nginx
+                            else
+                                echo "Nginx already installed."
+                            fi
+
+                            echo "Creating nginx config..."
+                            cat <<EOC > /etc/nginx/conf.d/${params.CLIENT}.conf
+server {
+    listen 80;
+    server_name ${params.URL};
+
+    location / {
+        proxy_pass http://localhost:${params.PORT};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \\$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \\$host;
+        proxy_cache_bypass \\$http_upgrade;
+    }
+
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+}
+EOC
+
+                            nginx -t && systemctl reload nginx
+EOF
+                    """
+                }
+            }
+        }
+
         stage('Deploy to Remote Server') {
             steps {
                 sshagent([env.SSH_KEY_ID]) {
@@ -30,22 +75,18 @@ pipeline {
                             set -e
                             sudo -i
 
-                            # Create user and project directory
                             useradd -m -s /bin/bash ${params.CLIENT} || true
                             mkdir -p /home/${params.CLIENT}
                             cd /home/${params.CLIENT}
 
-                            # Install dependencies
                             yum install -y git docker libxcrypt-compat
                             systemctl enable --now docker
 
-                            # Install Docker Compose
                             if [ ! -f /usr/local/bin/docker-compose ]; then
                                 curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
                                 chmod +x /usr/local/bin/docker-compose
                             fi
 
-                            # Clone and prepare project
                             if [ ! -d filamentphp ]; then
                                 git clone https://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@github.com/Sandy120499/filamentphp
                             fi
@@ -54,7 +95,6 @@ pipeline {
                             git pull
                             cp .env.example .env
 
-                            # Update .env file
                             sed -i '/^DB_CONNECTION=/c\\DB_CONNECTION=mysql' .env
                             sed -i '/^DB_HOST=/c\\DB_HOST=db' .env
                             sed -i '/^DB_PORT=/c\\DB_PORT=3306' .env
@@ -64,8 +104,6 @@ pipeline {
                             sed -i '/^APP_NAME=/c\\APP_NAME="${params.CLIENT}"' .env
                             echo "ASSET_URL=${params.URL}" >> .env
 
-
-                            # Replace placeholders in docker-compose.yml
                             sed -i "s/{{CLIENT}}/${params.CLIENT}/g" docker-compose.yml
                             sed -i "s/{{PORT}}/${params.PORT}/g" docker-compose.yml
                             sed -i "s/{{MYSQLPORT}}/${params.MYSQLPORT}/g" docker-compose.yml
