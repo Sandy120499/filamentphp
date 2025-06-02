@@ -70,21 +70,6 @@ pipeline {
                             sed -i "s/{{DB_PASSWD}}/${params.DB_PASSWD}/g" docker-compose.yml
 
                             docker-compose -p filament_${params.CLIENT} up -d --build
-EOF
-                    """
-                }
-            }
-        }
-
-        stage('Install and Configure Nginx') {
-            steps {
-                sshagent([env.SSH_KEY_ID]) {
-                    sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
-                            set -e
-                            sudo -i
-
-                            cd filamentphp
 
                             if ! command -v nginx > /dev/null 2>&1; then
                                 echo "Installing nginx..."
