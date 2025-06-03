@@ -70,7 +70,7 @@ pipeline {
                             sed -i '/^DB_USERNAME=/c\\DB_USERNAME=${params.DB_USERNAME}' .env
                             sed -i '/^DB_PASSWORD=/c\\DB_PASSWORD=${params.DB_PASSWD}' .env
                             sed -i '/^APP_NAME=/c\\APP_NAME="${params.CLIENT}"' .env
-                            echo "ASSET_URL=https://${params.URL}" >> .env
+                            echo "ASSET_URL=${params.URL}" >> .env
 
                             sed -i "s/{{CLIENT}}/${params.CLIENT}/g" docker-compose.yml
                             sed -i "s/{{PORT}}/${params.PORT}/g" docker-compose.yml
