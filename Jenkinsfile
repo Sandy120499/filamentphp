@@ -60,6 +60,7 @@ pipeline {
                             git pull
                             cp .env.example .env
                             cp sample.conf /etc/nginx/conf.d/${params.CLIENT}.conf
+                            cp sample.conf /etc/nginx/conf.d/pma${params.CLIENT}.conf
                             mkdir -p /etc/nginx/ssl
                             mv certificate.crt ca_bundle.crt private.key /etc/nginx/ssl/
 
@@ -101,6 +102,8 @@ EOF
                             echo "Creating nginx config..."
                             sed -i 's/server_name app_url;/server_name ${params.URL};/' /etc/nginx/conf.d/${params.CLIENT}.conf
                             sed -i 's|proxy_pass http://localhost:3000;|proxy_pass http://localhost:${params.PORT};|' /etc/nginx/conf.d/${params.CLIENT}.conf
+                            sed -i 's/server_name app_url;/server_name ${params.PMAURL};/' /etc/nginx/conf.d/pma${params.CLIENT}.conf
+                            sed -i 's|proxy_pass http://localhost:3000;|proxy_pass http://localhost:${params.PMA_PORT};|' /etc/nginx/conf.d/pma${params.CLIENT}.conf
                             nginx -t && systemctl reload nginx
 EOF
                     """
