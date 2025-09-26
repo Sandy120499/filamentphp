@@ -16,7 +16,7 @@ pipeline {
     }
 
     environment {
-        REMOTE_USER = 'ec2_user'
+        REMOTE_USER = 'ec2-user'
         SSH_KEY_ID = 'jenkins_rsa'
         DOCKER_COMPOSE_VERSION = '1.29.2'
     }
