@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'IP_ADDRESS', description: 'Remote Server IP Address')
+        //string(name: 'IP_ADDRESS', description: 'Remote Server IP Address')
         string(name: 'CLIENT', defaultValue: 'client1', description: 'Client Name (no spaces)')
         string(name: 'URL', description: 'Enter application URL (e.g., yourdomain.com)')
         string(name: 'PMAURL', description: 'Enter PMA application URL')
@@ -16,6 +16,7 @@ pipeline {
     }
 
     environment {
+        IP_ADDRESS = '54.90.98.111'
         REMOTE_USER = 'ec2-user'
         SSH_KEY_ID = 'jenkins_rsa'
         DOCKER_COMPOSE_VERSION = '1.29.2'
