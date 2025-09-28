@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     parameters {
-        //string(name: 'IP_ADDRESS', description: 'Remote Server IP Address')
         string(name: 'CLIENT', defaultValue: 'client1', description: 'Client Name (no spaces)')
         string(name: 'URL', description: 'Enter application URL (e.g., yourdomain.com)')
         string(name: 'PMAURL', description: 'Enter PMA application URL')
@@ -16,7 +15,8 @@ pipeline {
     }
 
     environment {
-        IP_ADDRESS = '54.90.98.111'
+        // Use env.IP_ADDRESS in SSH commands for consistency
+        IP_ADDRESS = '54.90.98.111' 
         REMOTE_USER = 'ec2-user'
         SSH_KEY_ID = 'jenkins_rsa'
         DOCKER_COMPOSE_VERSION = '1.29.2'
@@ -28,7 +28,8 @@ pipeline {
             steps {
                 sshagent([env.SSH_KEY_ID]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
+                        # CORRECTED: Using env.REMOTE_USER and env.IP_ADDRESS
+                        ssh -o StrictHostKeyChecking=no ${env.REMOTE_USER}@${env.IP_ADDRESS} << EOF
                             set -e
                             sudo -i
 
@@ -96,7 +97,8 @@ EOF
             steps {
                 sshagent([env.SSH_KEY_ID]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
+                        # CORRECTED: Using env.REMOTE_USER and env.IP_ADDRESS
+                        ssh -o StrictHostKeyChecking=no ${env.REMOTE_USER}@${env.IP_ADDRESS} << EOF
                             set -e
                             sudo -i
 
@@ -116,7 +118,8 @@ EOF
             steps {
                 sshagent([env.SSH_KEY_ID]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${params.IP_ADDRESS} << EOF
+                        # CORRECTED: Using env.REMOTE_USER and env.IP_ADDRESS
+                        ssh -o StrictHostKeyChecking=no ${env.REMOTE_USER}@${env.IP_ADDRESS} << EOF
                             sleep 10
                             sudo -i
                             cd /home/${params.CLIENT}/filamentphp
