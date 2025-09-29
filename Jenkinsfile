@@ -16,7 +16,7 @@ pipeline {
 
     environment {
         // Use env.IP_ADDRESS in SSH commands for consistency
-        IP_ADDRESS = '54.90.98.111' 
+        IP_ADDRESS = '54.242.132.148' 
         REMOTE_USER = 'ec2-user'
         SSH_KEY_ID = 'jenkins_rsa'
         DOCKER_COMPOSE_VERSION = '1.29.2'
